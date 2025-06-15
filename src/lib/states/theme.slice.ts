@@ -1,12 +1,7 @@
 // redux/themeSlice.ts
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
-
-export type Theme = "light" | "dark" | "system";
-
-interface ThemeState {
-  value: Theme;
-}
+import type { Theme, ThemeState } from "../types/theme";
 
 const storageKey = "vite-ui-theme";
 

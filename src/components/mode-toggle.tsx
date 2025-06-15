@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/lib/hooks/redux";
-import { setTheme } from "@/lib/states/theme";
+import { setTheme } from "@/lib/states/theme.slice";
 import { Moon, Sun } from "lucide-react";
 import { Button } from "./ui/button";
 
