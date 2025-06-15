@@ -1,6 +1,7 @@
 import { useAppSelector } from "@/lib/hooks/redux";
 import { PlusCircle } from "lucide-react";
-import { useState, type JSX } from "react";
+import { Fragment, useState, type JSX } from "react";
+import DropArea from "./drop-area";
 import TaskCard from "./task-card";
 import { TaskDialog } from "./task-form";
 import { Button } from "./ui/button";
@@ -13,9 +14,7 @@ interface Props {
 
 export default function Column({ column, title, icon }: Props) {
   const [open, setOpen] = useState(false);
-  const tasks = useAppSelector((state) =>
-    state.tasks.tasks.filter((task) => task.column === column)
-  );
+  const tasks = useAppSelector((state) => state.tasks.tasks);
 
   return (
     <div className="bg-muted rounded-xl p-4 space-y-4 shadow flex flex-col">
@@ -35,9 +34,21 @@ export default function Column({ column, title, icon }: Props) {
       </div>
 
       <div className="space-y-3 overflow-y-auto min-h-[100px] max-h-[70vh] scrollbar-thin px-2">
-        {tasks.map((task) => (
-          <TaskCard key={task.id} task={task} />
-        ))}
+        <DropArea
+          isListEmpty={tasks.length ? false : true}
+          column={column}
+          position={0}
+        />
+
+        {tasks.map(
+          (task, index) =>
+            task.column === column && (
+              <Fragment key={task.id}>
+                <TaskCard task={task} index={index} />
+                <DropArea column={column} position={index + 1} />
+              </Fragment>
+            )
+        )}
       </div>
 
       <TaskDialog open={open} setOpen={setOpen} defaultColumn={column} />

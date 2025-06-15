@@ -6,6 +6,7 @@ import type { ColumnType, Task } from "../types/task";
 
 interface TaskState {
   tasks: Task[];
+  activeTaskIndex?: number;
 }
 
 // Utility to load from localStorage
@@ -21,6 +22,7 @@ const loadFromLocalStorage = (): Task[] => {
 
 const initialState: TaskState = {
   tasks: loadFromLocalStorage(),
+  activeTaskIndex: undefined,
 };
 
 const taskSlice = createSlice({
@@ -70,18 +72,42 @@ const taskSlice = createSlice({
     deleteTask: (state, action: PayloadAction<string>) => {
       state.tasks = state.tasks.filter((task) => task.id !== action.payload);
     },
-    moveTask: (
+    setActiveTaskIndex: (state, action: PayloadAction<number>) => {
+      state.activeTaskIndex = action.payload;
+    },
+    clearActiveTaskIndex: (state) => {
+      state.activeTaskIndex = undefined;
+    },
+    onDrop: (
       state,
-      action: PayloadAction<{ id: string; column: ColumnType }>
+      action: PayloadAction<{ position: number; column: ColumnType }>
     ) => {
-      const task = state.tasks.find((t) => t.id === action.payload.id);
-      if (task) {
-        task.column = action.payload.column;
-        task.updatedAt = Date.now();
-      }
+      console.log("onDrop action:", action.payload);
+      const { position, column } = action.payload;
+
+      if (state.activeTaskIndex === undefined) return;
+
+      const taskToMove = state.tasks[state.activeTaskIndex];
+      if (!taskToMove) return;
+
+      state.tasks.splice(state.activeTaskIndex, 1);
+
+      taskToMove.column = column;
+      taskToMove.updatedAt = Date.now();
+
+      state.tasks.splice(position, 0, taskToMove);
+
+      state.activeTaskIndex = undefined;
     },
   },
 });
 
-export const { addTask, updateTask, deleteTask, moveTask } = taskSlice.actions;
+export const {
+  addTask,
+  updateTask,
+  deleteTask,
+  setActiveTaskIndex,
+  clearActiveTaskIndex,
+  onDrop,
+} = taskSlice.actions;
 export default taskSlice.reducer;
