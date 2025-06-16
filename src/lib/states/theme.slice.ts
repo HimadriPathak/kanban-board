@@ -1,4 +1,3 @@
-// redux/themeSlice.ts
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import type { Theme, ThemeState } from "../types/theme";

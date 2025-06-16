@@ -1,4 +1,3 @@
-// types/task.ts
 export type ColumnType = "todo" | "in-progress" | "done";
 
 export interface Task {

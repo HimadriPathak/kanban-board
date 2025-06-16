@@ -1,4 +1,3 @@
-// lib/utils/localStorage.ts
 import { toast } from "sonner";
 
 export const saveTasksToLocalStorage = (tasks: any) => {

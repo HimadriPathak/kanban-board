@@ -102,7 +102,15 @@ export function TaskDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{isEdit ? "Edit Task" : "Create Task"}</DialogTitle>
+          <DialogTitle>
+            {isEdit ? "Edit Task" : "Create Task"}
+            <Badge
+              variant="outline"
+              className="text-sm px-3 mx-1 py-1 rounded-md"
+            >
+              {defaultColumn}
+            </Badge>
+          </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-2">
           <Input placeholder="Title" {...register("title")} />
@@ -117,7 +125,6 @@ export function TaskDialog({
 
           <Input placeholder="Tags (comma separated)" {...register("tags")} />
 
-          <Badge variant="secondary">{defaultColumn}</Badge>
           <input type="hidden" value={defaultColumn} {...register("column")} />
 
           <Button type="submit" className="w-full">

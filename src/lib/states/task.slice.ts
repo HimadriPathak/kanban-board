@@ -9,7 +9,6 @@ interface TaskState {
   activeTaskIndex?: number;
 }
 
-// Utility to load from localStorage
 const loadFromLocalStorage = (): Task[] => {
   try {
     const stored = localStorage.getItem("kanban-tasks");

@@ -17,7 +17,7 @@ export default function Column({ column, title, icon }: Props) {
   const tasks = useAppSelector((state) => state.tasks.tasks);
 
   return (
-    <div className="bg-muted rounded-xl p-4 space-y-4 shadow flex flex-col">
+    <div className="bg-muted rounded-xl p-4 shadow flex flex-col md:h-[80vh] overflow-hidden">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           {icon}
@@ -33,12 +33,8 @@ export default function Column({ column, title, icon }: Props) {
         </Button>
       </div>
 
-      <div className="space-y-3 overflow-y-auto min-h-[100px] max-h-[70vh] scrollbar-thin px-2">
-        <DropArea
-          isListEmpty={tasks.length ? false : true}
-          column={column}
-          position={0}
-        />
+      <div className="space-y-3 overflow-y-auto min-h-[100px] px-2 scrollbar-thin flex-1">
+        <DropArea column={column} position={0} />
 
         {tasks.map(
           (task, index) =>

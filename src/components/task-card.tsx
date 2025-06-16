@@ -5,10 +5,14 @@ import {
   setActiveTaskIndex,
 } from "@/lib/states/task.slice";
 import type { Task } from "@/lib/types/task";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 import { Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { TaskDialog } from "./task-form";
 import { Button } from "./ui/button";
+
+dayjs.extend(relativeTime);
 
 interface Props {
   task: Task;
@@ -23,16 +27,18 @@ export default function TaskCard({ task, index }: Props) {
 
   return (
     <div
-      className={`rounded-lg cursor-grab ${task.color} ${
-        isActive ? "ring-2 ring-zinc-800 dark:ring-gray-500 scale-[1.01]" : ""
+      className={`rounded-xl shadow-md hover:shadow-lg transition-shadow cursor-grab text-black ${
+        task.color
+      } ${
+        isActive ? "ring-2 ring-zinc-800 dark:ring-gray-400 scale-[1.01]" : ""
       } transition-transform duration-200 ease-in-out`}
       draggable
       onDragStart={() => dispatch(setActiveTaskIndex(index))}
       onDragEnd={() => dispatch(clearActiveTaskIndex())}
     >
-      <div className="p-3 flex flex-col">
-        <div className="flex justify-between">
-          <div className="text-black font-medium text-base">{task.title}</div>
+      <div className="p-4 flex flex-col gap-2">
+        <div className="flex justify-between items-start">
+          <h3 className="font-semibold text-lg">{task.title}</h3>
           <div className="flex gap-1">
             <Button
               size="icon"
@@ -40,7 +46,7 @@ export default function TaskCard({ task, index }: Props) {
               className="hover:scale-110"
               onClick={() => setEditOpen(true)}
             >
-              <Pencil className="w-4 h-4 text-black" />
+              <Pencil className="w-4 h-4" />
             </Button>
             <Button
               size="icon"
@@ -53,23 +59,26 @@ export default function TaskCard({ task, index }: Props) {
           </div>
         </div>
 
-        <div className="text-sm text-muted-foreground pb-2">
-          {task.description}
-        </div>
+        {task.description && (
+          <p className="text-sm text-gray-600">{task.description}</p>
+        )}
 
         <div className="flex flex-wrap gap-1">
           {task.tags.map((tag, i) => (
             <span
               key={i}
-              className="text-xs bg-muted px-2 py-0.5 rounded text-muted-foreground"
+              className="text-xs px-2 py-0.5 rounded-full bg-white/40 border border-black/10"
             >
               #{tag}
             </span>
           ))}
         </div>
+
+        <div className="text-xs text-gray-600 mt-1">
+          Updated {dayjs(task.updatedAt).fromNow()}
+        </div>
       </div>
 
-      {/* Edit Dialog */}
       <TaskDialog
         open={editOpen}
         setOpen={setEditOpen}
