@@ -14,7 +14,7 @@ interface Props {
 
 export default function Column({ column, title, icon }: Props) {
   const [open, setOpen] = useState(false);
-  const tasks = useAppSelector((state) => state.tasks.tasks);
+  const tasks = useAppSelector((state) => state.tasks.filteredTasks);
 
   return (
     <div className="bg-muted rounded-xl p-4 shadow flex flex-col md:h-[80vh] overflow-hidden">

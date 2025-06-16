@@ -6,6 +6,7 @@ import type { ColumnType, Task } from "../types/task";
 
 interface TaskState {
   tasks: Task[];
+  filteredTasks: Task[];
   activeTaskIndex?: number;
 }
 
@@ -21,6 +22,7 @@ const loadFromLocalStorage = (): Task[] => {
 
 const initialState: TaskState = {
   tasks: loadFromLocalStorage(),
+  filteredTasks: [],
   activeTaskIndex: undefined,
 };
 
@@ -98,6 +100,15 @@ const taskSlice = createSlice({
 
       state.activeTaskIndex = undefined;
     },
+    filterTasksByTags: (state, action: PayloadAction<string[]>) => {
+      if (action.payload.length === 0) {
+        state.filteredTasks = state.tasks;
+      } else {
+        state.filteredTasks = state.tasks.filter((task) =>
+          task.tags.some((tag) => action.payload.includes(tag))
+        );
+      }
+    },
   },
 });
 
@@ -108,5 +119,6 @@ export const {
   setActiveTaskIndex,
   clearActiveTaskIndex,
   onDrop,
+  filterTasksByTags,
 } = taskSlice.actions;
 export default taskSlice.reducer;
